@@ -2,6 +2,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/*
+* Nate Webber
+* Advent of Code 2021
+* Day 2 - 12/02/2021
+* Problem 1
+*/
+
 public class Problem1{
     public static void main(String[] args) throws FileNotFoundException{
         File inFile = new File("/home/nate/personal/advent2021/2/in.txt");

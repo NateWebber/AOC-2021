@@ -9,6 +9,7 @@ import java.util.Scanner;
 * Day 1 - 12/01/2021
 * Problem 1
 */
+
 class d1p1{
     public static void main(String[] args) throws FileNotFoundException{
         File inFile = new File("/home/nate/personal/advent2021/1/input.txt");
