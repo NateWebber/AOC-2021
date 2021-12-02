@@ -1,0 +1,28 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Problem2 {
+    public static void main(String[] args) throws FileNotFoundException{
+        File inFile = new File("/home/nate/personal/advent2021/2/in.txt");
+        Scanner fileScanner = new Scanner(inFile);
+        int verSum = 0, horSum = 0, aim = 0;
+        while (fileScanner.hasNextLine()){
+            String nextLine = fileScanner.nextLine();
+            switch (nextLine.charAt(0)){
+                case 'f':
+                    horSum += Integer.parseInt(nextLine.substring(8));
+                    verSum += (aim * Integer.parseInt(nextLine.substring(8)));
+                    break;
+                case 'u':
+                    aim -= Integer.parseInt(nextLine.substring(3));
+                    break;
+                case 'd':
+                    aim += Integer.parseInt(nextLine.substring(5));
+                    break;
+            }
+        }
+        System.out.println(horSum * verSum);
+        fileScanner.close();
+    }
+}
