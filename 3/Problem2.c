@@ -18,7 +18,7 @@ int containsX(char* s){
     return 0;
 }
 
-char* getOxygen(){
+int getOxygen(){
     FILE* inFile = fopen("/home/nate/personal/advent2021/3/in.txt", "r");
     char** inputs[1000][12];
 
@@ -46,7 +46,7 @@ char* getOxygen(){
                     zeroCount++;
             }
         }
-        printf("oneCount + zeroCount = %d\n", oneCount + zeroCount);
+        //printf("oneCount + zeroCount = %d\n", oneCount + zeroCount);
         if (oneCount >= zeroCount)
             commonBitString[i] = '1';
         else
@@ -62,7 +62,7 @@ char* getOxygen(){
             if (!containsX(inputs[j]))
                 surviveCount++;
         }
-        printf("survive count: %d\n", surviveCount);
+        //printf("survive count: %d\n", surviveCount);
         if (surviveCount == 1)
             break;
         oneCount = 0;
@@ -72,20 +72,18 @@ char* getOxygen(){
     for (int x = 0; x < (sizeof(inputs) / sizeof(inputs[0])); x++){
         if (!containsX(inputs[x])){
             printf("surviving line: %s\n", inputs[x]);
-            char* returnString;
-            strcpy(returnString, inputs[x]);
-            return returnString;
+            return (unsigned int) strtol(inputs[x], NULL, 2);
         }  
     }
     printf("this is bad 2\n");
-    return NULL;
+    return 0;
 
 }
 
-char* getCO2(){
+int getCO2(){
     FILE* inFile = fopen("/home/nate/personal/advent2021/3/in.txt", "r");
     char** inputs[1000][12];
-
+    char returnString[12];
     //grab all the inputs from the file. I'm choosing to keep them as strings/chars for ease of indexing
     for (int x = 0; x < (sizeof(inputs) / sizeof(inputs[0])); x++)
         fscanf(inFile, "%s", inputs[x]);
@@ -110,7 +108,7 @@ char* getCO2(){
                     zeroCount++;
             }
         }
-        printf("oneCount + zeroCount = %d\n", oneCount + zeroCount);
+        //printf("oneCount + zeroCount = %d\n", oneCount + zeroCount);
         if (oneCount >= zeroCount)
             commonBitString[i] = '1';
         else
@@ -126,7 +124,7 @@ char* getCO2(){
             if (!containsX(inputs[j]))
                 surviveCount++;
         }
-        printf("survive count: %d\n", surviveCount);
+        //printf("survive count: %d\n", surviveCount);
         if (surviveCount == 1)
             break;
         oneCount = 0;
@@ -136,21 +134,18 @@ char* getCO2(){
     for (int x = 0; x < (sizeof(inputs) / sizeof(inputs[0])); x++){
         if (!containsX(inputs[x])){
             printf("surviving line: %s\n", inputs[x]);
-            char* returnString;
-            strcpy(returnString, inputs[x]);
-            return returnString;     
+            return (unsigned int) strtol(inputs[x], NULL, 2);
         }
     }
-    printf("this is bad\n");
-    return NULL;
+    return 0;
 }
 
 int main(){
-    char* oxygenString = getOxygen();
-    printf("OXYGEN RATING: %s\n", oxygenString);
-    char* carbonString = getCO2();
-    printf("CO2 RATING: %s\n", carbonString);
-
+    int oxygen = getOxygen();
+    printf("OXYGEN RATING: %d\n", oxygen);
+    int carbon = getCO2();
+    printf("CO2 RATING: %d\n", carbon);
+    printf("LIFE SUPPORT RATING: %d\n", oxygen * carbon);
     return 1;
 }
 
