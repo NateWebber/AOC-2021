@@ -10,55 +10,30 @@ import java.util.Scanner;
 * Problems 1 and 2
 */
 
-//the biggest O there ever was
 public class Day5 {
     public static void main(String[] args) throws FileNotFoundException {
         File inFile = new File("/home/nate/personal/advent2021/5/in.txt");
         Scanner fileReader = new Scanner(inFile);
 
-        ArrayList<Tile> tilesList = new ArrayList<>();
-        /*
-         * String testLine = fileReader.nextLine();
-         * String[] testSplit = testLine.split(" ", -1);
-         * for (String s : testSplit)
-         * System.out.println(s);
-         * String[] secondSplit = testSplit[0].split(",", -1);
-         * for (String s : secondSplit)
-         * System.out.println(s);
-         */
+        ArrayList<Tile> dangerList = new ArrayList<>();
+
+        int[][] tiles = new int[1000][1000];
 
         while (fileReader.hasNextLine()) {
 
-            ArrayList<Tile> newTiles = parseLine(fileReader.nextLine());
-            /*
-             * for (Tile t : newTiles)
-             * t.printTile();
-             */
-            for (Tile t : newTiles) {
-                boolean matched = false;
-                for (Tile x : tilesList) {
-                    if (x.matchesTile(t)) {
-                        x.incrementCount();
-                        matched = true;
-                    }
-                }
-                if (!matched) {
-                    tilesList.add(t);
-                }
-            }
+            parseLine(fileReader.nextLine(), tiles, dangerList);
+
         }
-        int dangerCount = 0;
-        for (Tile t : tilesList) {
-            if (t.getCount() > 1) {
-                dangerCount += 1;
-            }
-        }
-        System.out.println(dangerCount);
+
+        fileReader.close();
+
+        System.out.println(dangerList.size());
     }
 
-    static ArrayList<Tile> parseLine(String s) {
-        ArrayList<Tile> returnList = new ArrayList<>();
+    static void parseLine(String s, int[][] tiles, ArrayList<Tile> dangerList) {
         // System.out.printf("looking at line: %s\n", s);
+
+        // all these lines are just dividing up the strings into the values we need
         String[] firstSplit = s.split(" ", -1);
         String[] firstStringCoords = firstSplit[0].split(",", -1);
         String[] secondStringCoords = firstSplit[2].split(",", -1);
@@ -69,17 +44,54 @@ public class Day5 {
 
         // System.out.printf("determined line goes from [%d, %d] to [%d, %d]\n", firstX,
         // firstY, secondX, secondY);
+
+        /*
+         * Next we have to increment all the appropriate positions in the master array
+         * The way we determine what tiles are included in a line is largely the same
+         * for all 4 directions, only slight adjustments are needed
+         */
+
         // horizontal line
         if (firstY == secondY) {
+            // these checks determine the specific direction the line moves
             if (firstX < secondX) {
                 for (int i = firstX; i <= secondX; i++) {
                     // System.out.printf("adding tile %d %d\n", i, firstY);
-                    returnList.add(new Tile(i, firstY));
+                    tiles[i][firstY] += 1; // increment the position in the array, since the line has crossed it
+                    // check for a dangerous tile
+                    if (tiles[i][firstY] > 1) {
+                        // System.out.printf("Danger!\n");
+                        Tile dTile = new Tile(i, firstY);
+                        boolean matchFound = false;
+                        // if the dangerous tile is already know to us, we don't care about it
+                        for (Tile t : dangerList) {
+                            if (t.matchesTile(dTile)) {
+                                // System.out.printf("tile already known as dangerous\n");
+                                matchFound = true;
+                            }
+                        }
+                        // this was a new dangerous tile!
+                        if (!matchFound)
+                            dangerList.add(dTile);
+                    }
                 }
             } else {
                 for (int i = firstX; i >= secondX; i--) {
                     // System.out.printf("adding tile %d %d\n", i, firstY);
-                    returnList.add(new Tile(i, firstY));
+                    tiles[i][firstY] += 1;
+                    if (tiles[i][firstY] > 1) {
+                        // System.out.printf("Danger!\n");
+                        Tile dTile = new Tile(i, firstY);
+                        boolean matchFound = false;
+                        for (Tile t : dangerList) {
+                            if (t.matchesTile(dTile)) {
+                                // System.out.printf("tile already known as dangerous\n");
+                                matchFound = true;
+                            }
+                        }
+                        if (!matchFound)
+                            dangerList.add(dTile);
+                    }
                 }
             }
         }
@@ -88,22 +100,146 @@ public class Day5 {
             if (firstY < secondY) {
                 for (int i = firstY; i <= secondY; i++) {
                     // System.out.printf("adding tile %d %d\n", firstX, i);
-                    returnList.add(new Tile(firstX, i));
+                    tiles[firstX][i] += 1;
+                    if (tiles[firstX][i] > 1) {
+                        // System.out.printf("Danger!\n");
+                        Tile dTile = new Tile(firstX, i);
+                        boolean matchFound = false;
+                        for (Tile t : dangerList) {
+                            if (t.matchesTile(dTile)) {
+                                // System.out.printf("tile already known as dangerous\n");
+                                matchFound = true;
+                            }
+                        }
+                        if (!matchFound)
+                            dangerList.add(dTile);
+                    }
                 }
             } else {
                 for (int i = firstY; i >= secondY; i--) {
                     // System.out.printf("adding tile %d %d\n", firstX, i);
-                    returnList.add(new Tile(firstX, i));
+                    tiles[firstX][i] += 1;
+                    if (tiles[firstX][i] > 1) {
+                        // System.out.printf("Danger!\n");
+                        Tile dTile = new Tile(firstX, i);
+                        boolean matchFound = false;
+                        for (Tile t : dangerList) {
+                            if (t.matchesTile(dTile)) {
+                                // System.out.printf("tile already known as dangerous\n");
+                                matchFound = true;
+                            }
+                        }
+                        if (!matchFound)
+                            dangerList.add(dTile);
+                    }
                 }
             }
         }
-        return returnList;
+        /*
+         * here be ̶d̶r̶a̶g̶o̶n̶s̶ diagonal lines
+         * In the case of diagonal lines, we know that neither of the coordinates will
+         * match
+         * This means that the line could travel in any of 4 directions, up and right,
+         * down and right, up and left, or down and left
+         * We figure that out first by two layers of if statements comparing the
+         * coordinates
+         * Then, since we know diagonals will only be at 45 degree angles, stepping
+         * along the lines isn't too hard
+         */
+        else {
+            // moving right
+            if (firstX < secondX) {
+                // moving down and right
+                if (firstY < secondY) {
+                    for (int i = firstX, j = firstY; i <= secondX && j <= secondY; i++, j++) {
+                        // System.out.printf("adding tile %d %d\n", firstX, i);
+                        tiles[i][j] += 1;
+                        if (tiles[i][j] > 1) {
+                            // System.out.printf("Danger!\n");
+                            Tile dTile = new Tile(i, j);
+                            boolean matchFound = false;
+                            for (Tile t : dangerList) {
+                                if (t.matchesTile(dTile)) {
+                                    // System.out.printf("tile already known as dangerous\n");
+                                    matchFound = true;
+                                }
+                            }
+                            if (!matchFound)
+                                dangerList.add(dTile);
+                        }
+                    }
+                }
+                // moving up and right
+                else {
+                    for (int i = firstX, j = firstY; i <= secondX && j >= secondY; i++, j--) {
+                        // System.out.printf("adding tile %d %d\n", firstX, i);
+                        tiles[i][j] += 1;
+                        if (tiles[i][j] > 1) {
+                            // System.out.printf("Danger!\n");
+                            Tile dTile = new Tile(i, j);
+                            boolean matchFound = false;
+                            for (Tile t : dangerList) {
+                                if (t.matchesTile(dTile)) {
+                                    // System.out.printf("tile already known as dangerous\n");
+                                    matchFound = true;
+                                }
+                            }
+                            if (!matchFound)
+                                dangerList.add(dTile);
+                        }
+                    }
+                }
+            }
+            // moving left
+            else {
+                // moving down and left
+                if (firstY < secondY) {
+                    for (int i = firstX, j = firstY; i >= secondX && j <= secondY; i--, j++) {
+                        // System.out.printf("adding tile %d %d\n", firstX, i);
+                        tiles[i][j] += 1;
+                        if (tiles[i][j] > 1) {
+                            // System.out.printf("Danger!\n");
+                            Tile dTile = new Tile(i, j);
+                            boolean matchFound = false;
+                            for (Tile t : dangerList) {
+                                if (t.matchesTile(dTile)) {
+                                    // System.out.printf("tile already known as dangerous\n");
+                                    matchFound = true;
+                                }
+                            }
+                            if (!matchFound)
+                                dangerList.add(dTile);
+                        }
+                    }
+                }
+                // moving up and left
+                else {
+                    for (int i = firstX, j = firstY; i >= secondX && j >= secondY; i--, j--) {
+                        // System.out.printf("adding tile %d %d\n", firstX, i);
+                        tiles[i][j] += 1;
+                        if (tiles[i][j] > 1) {
+                            // System.out.printf("Danger!\n");
+                            Tile dTile = new Tile(i, j);
+                            boolean matchFound = false;
+                            for (Tile t : dangerList) {
+                                if (t.matchesTile(dTile)) {
+                                    // System.out.printf("tile already known as dangerous\n");
+                                    matchFound = true;
+                                }
+                            }
+                            if (!matchFound)
+                                dangerList.add(dTile);
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     static class Tile {
         private int x;
         private int y;
-        private int count;
 
         public int[] getCoords() {
             return new int[] { this.x, this.y };
@@ -124,15 +260,6 @@ public class Day5 {
         public Tile(int nX, int nY) {
             this.x = nX;
             this.y = nY;
-            this.count = 1;
-        }
-
-        public void incrementCount() {
-            this.count += 1;
-        }
-
-        public int getCount() {
-            return this.count;
         }
 
         public void printTile() {
