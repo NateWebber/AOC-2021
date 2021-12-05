@@ -8,7 +8,7 @@ import java.util.Scanner;
 /*
 * Nate Webber
 * Advent of Code 2021
-* Day 4 - 12/03/2021
+* Day 4 - 12/04/2021
 * Problems 1 and 2
 */
 
