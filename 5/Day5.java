@@ -15,21 +15,34 @@ public class Day5 {
         File inFile = new File("/home/nate/personal/advent2021/5/in.txt");
         Scanner fileReader = new Scanner(inFile);
 
-        ArrayList<Tile> dangerList = new ArrayList<>();
+        ArrayList<Tile> dangerList = new ArrayList<>(); // this will be the list of dangerous tiles
 
-        int[][] tiles = new int[1000][1000];
+        int[][] tiles = new int[1000][1000]; // this is our master representation of the grid
 
+        /*
+         * Literally all of the work for this project is in the parseLine function
+         * It just ended up being easier to do it all in one fell-swoop
+         */
         while (fileReader.hasNextLine()) {
-
             parseLine(fileReader.nextLine(), tiles, dangerList);
-
         }
 
         fileReader.close();
 
-        System.out.println(dangerList.size());
+        System.out.println(dangerList.size()); // At the end, this dangerList is just every tile with more than 1 line
+                                               // on it, so all we need is its size
     }
 
+    /*
+     * This function takes a line of input, and the master tile representation and
+     * list of dangerous tiles
+     * It parses the line represented by the input string, and determines all of the
+     * tiles that it crosses
+     * It then modifies the master representation and adds dangerous tiles to the
+     * list (if they're not already there)
+     * This is really all that needs to be done to get the answers for today's
+     * problems, so most of the program is in here
+     */
     static void parseLine(String s, int[][] tiles, ArrayList<Tile> dangerList) {
         // System.out.printf("looking at line: %s\n", s);
 
@@ -63,7 +76,7 @@ public class Day5 {
                         // System.out.printf("Danger!\n");
                         Tile dTile = new Tile(i, firstY);
                         boolean matchFound = false;
-                        // if the dangerous tile is already know to us, we don't care about it
+                        // if the dangerous tile is already known to us, we don't care about it
                         for (Tile t : dangerList) {
                             if (t.matchesTile(dTile)) {
                                 // System.out.printf("tile already known as dangerous\n");
@@ -237,6 +250,13 @@ public class Day5 {
         }
     }
 
+    /*
+     * The Tile class is really only useful for checking if one tile matches another
+     * A comparison we need to make when we're determining whether we've seen a
+     * dangerous tile before
+     * I originally used these much more heavily, but the solution I wrote was
+     * terribly slow
+     */
     static class Tile {
         private int x;
         private int y;
