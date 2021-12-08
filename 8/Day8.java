@@ -18,7 +18,8 @@ import java.util.Scanner;
 
 /*
 * I tried to approach this problem from a logical perspective, almost like building a proof
-* 
+* Basically we determine what each segment is based only on information that we can guarantee we have before attempting that determination
+* The exact reasoning is detailed in determineNumbers()
 */
 public class Day8 {
 	/*
