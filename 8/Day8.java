@@ -26,6 +26,8 @@ public class Day8 {
 	 * Nothing vey interesting in the main method, mostly just function calls
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
+		long startTime = System.currentTimeMillis();
+
 		File inFile = new File("/home/nate/personal/advent2021/8/in.txt");
 		Scanner reader = new Scanner(inFile);
 
@@ -34,11 +36,14 @@ public class Day8 {
 		while (reader.hasNextLine())
 			inputLines.add(reader.nextLine());
 
-		printStringList(inputLines);
+		// printStringList(inputLines);
 
 		int sum = finalSum(inputLines);
 		System.out.println(sum);
 		reader.close();
+		long endTime = System.currentTimeMillis();
+
+		System.out.println("took " + (endTime - startTime) + "ms");
 	}
 
 	/*
