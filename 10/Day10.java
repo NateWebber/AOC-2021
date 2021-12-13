@@ -13,6 +13,7 @@ import java.util.Scanner;
 * Problems 1 and 2
 */
 
+
 public class Day10 {
 	public static void main(String[] args) throws FileNotFoundException {
 		File inFile = new File("/home/nate/personal/advent2021/10/in.txt");
