@@ -9,12 +9,11 @@ import java.util.Scanner;
 * Problems 1 and 2
 */
 
-public class template{
-	public static void main(String[] args) throws FileNotFoundException{
-		File inFile = new File("/home/nate/personal/advent2021//in.txt");
+public class Day14 {
+	public static void main(String[] args) throws FileNotFoundException {
+		File inFile = new File("/home/nate/personal/advent2021/14/small.txt");
 		Scanner reader = new Scanner(inFile);
 
 		reader.close();
 	}
 }
-		

@@ -80,7 +80,7 @@ public class Day12 {
 	static void stepPathProblem2(Cave start, Cave dest, String currPath, ArrayList<String> paths){
 		if (dest.getName().equals("start"))
 			return;
-		// small cave we've been to, and we've already repeated it
+		// small cave we've been to, and we've already repeated a small cave
 		if (dest.isSmall() && currPath.contains(dest.getName()) && pathRepeatsSmallCave(currPath))
 			return;
 		currPath += dest.getName();
